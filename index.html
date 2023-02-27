@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Weather Web App </title>
+    <script src="https://cdn.tailwindcss.com"> </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+     <link rel="shortcut icon" href="./assets/img/logo.png" type="image/x-icon">
+    <style>
+      body{
+        font-family: 'Poppins', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-slate-900">
+      
+      <nav class="flex items-center justify-between sticky top-0 z-10 bg-slate-900 flex p-2 backdrop-filter backdrop-blur-lg bg-opacity-30 border-b border-gray-200">
+        <!-- h1 -->
+        <h1 class="text-sm sm:text-sm md:text-2xl lg:text-2xl text-slate-50 pt-2 pl-3"> Forecast </h1> 
+        <!-- input box  -->
+        <form onsubmit="getData(event)" class="flex items-center justify-center w-3/4  sm:w-auto lg:w-1/3 lg:relative lg:right-10">
+          <input id="search-bar" class="w-full sm:w-3/5 px-4 py-2 rounded-l-lg border-1 border-r-0 border-gray-500 focus:outline-none focus:border-slate-900 placeholder:italic placeholder:text-slate-900 text-slate-900" type="search" placeholder="Enter City Name">
+          <button class="px-4 py-2 bg-sky-500 text-white rounded-r-lg border-1 border-slate-600 hover:bg-sky-400 focus:outline-none hover:text-white">Search</button>
+        </form> 
+        <!-- reload -->
+        <button id="reload" onClick="location.reload()" class="hidden lg:inline"> <img class="md:justify-end lg:relative right-80 hover:transform hover:scale-110 sm:flex justify-end" src="./assets/img/reload.svg"/></button>
+      </nav>
+          
+
+                    <!-- main -->
+    <section aria-label="main">
+    <main id="bg-img" class="">
+      <p class="text-white sm:text-sm  sm:relative sm:top-5 sm:pt-3 sm:pb-5 sm:pl-5 md:text-sm md:pt-2 lg:text-xl  lg:absolute lg:top-20 lg:pl-5">Current Date: <span id="currDate"></span></p>
+      <p class="text-white sm:text-sm  sm:pt-3 sm:pb-5 sm:absolute sm:right-5 sm:top-20 md:text-sm md:pt-2 md:absolute md:right-5 md:top-20 lg:text-xl lg:absolute lg:top-20 lg:right-10 lg:pr-5">Current Time: <span id="currTime"></span></p>
+
+      <div id="countryDetails" class="flex justify-center  p-10  text-white lg:text-2xl sm:text-sm md:text-sm">
+                    <!-- Cityname -->
+        <div class="card">
+            <p id="cityName" title="CityName">City Name </p>
+        </div>
+        <span>,</span>
+                    <!-- state name -->
+        <div class="card ml-2">
+            <p id="stateName" title="State Name"> State Name </p>
+        </div>
+        <span>,</span>
+                    <!-- countryname -->
+        <div class="card ml-2">
+            <p id="countryName" title="Country Name">Country Name</p>
+        </div>
+        </div>
+                <!-- temperature -->
+        <div class="temperature flex justify-center text-3xl lg:justify-center sm:justify-center md:justify-center lg:text-7xl sm:text-5xl md:text-6xl text-white lg:mt-5">
+                <!-- CELS -->
+        <p id="cels" class="relative right-20 mr-1 pt-5 sm:pt-5 md:pt-5 lg:relative lg:bottom-3">0</p>
+        <p class="relative right-20 pt-5 sm:pt-5 md:pb-5 lg:relative lg:bottom-3">&#8451;</p>
+                <!-- line -->
+        <div class="h-20 w-1 bg-zinc-400 relative right-9"></div>
+                <!-- fehr -->
+        <p id="fehr" class="sm:pt-5 pt-5 md:pt-5 lg:relative lg:bottom-3">0</p>
+        <p class="sm:pt-5 pt-5 md:pt-5 lg:relative lg:bottom-3">&#8457;</p>
+        </div>
+        <div class="flex justify-center mt-2 relative right-10">    
+          <!-- img -->
+        <img width="50px" id="logoImage" src=""/>
+        <span id="weatherStatus" class="text-white text-3xl">Weather Status</span>
+        </div>
+        <div id="timeUpdate" class="flex justify-center gap-x-3 realtive right-20 text-white text-1xl">
+        <p>Updated as of </p>
+        <p id="lastUpdate">____</p>
+        </div>
+        <div id="climateDetails" class="grid grid-cols-1 gap-y-3 ml-20 mr-20 text-sm justify-center pl-5 pr-5 lg:flex lg:gap-x-10 text-white lg:text-1.5xl justify-center mt-5 sm:flex sm:gap-x-5 sm:text-sm sm:ml-10 sm:mr-10 md:flex md:gap-x-5 md:text-sm md:ml-10 md:mr-10">
+        <p class="border-2 p-1 pl-2 pr-2 bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">Feels like <b id="inCel" class="pl-2"> </b> &#8451; 
+        <b id="infehr" class="pl-3"> </b> &#8457; </p> 
+        <p class="border-2 p-1 pl-2 pr-2 bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">Humidity <span id="humidity" class="font-bold"> in </span> &#37;</p>
+        <p class="border-2 p-1 pl-2 pr-2 bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">Wind Speed <span id="wind" class="font-bold"> in </span> mph </p>
+        <p class="border-2 p-1 pl-2 pr-2 bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">Visibility <span id="visibility" class="font-bold"> in </span> mil </p>
+        <p class="border-2 p-1 pl-2 pr-2 bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">Air Quality EPA Index: <span id="airIndex" class="ml-2 font-bold"></span></p>
+        </div>
+                        <!-- CARDS -->
+
+      <div class="grid grid-cols-1 gap-y-5 md:grid md:grid-cols-3 md:gap-10 mt-10 text-white ml-10 mr-10 pb-10 sm:grid sm:grid-cols-2 sm:gap-5 lg:grid lg:grid-cols-5 lg:gap-10">
+
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5  pl-10  text-xl"> Day </p>
+          <p> <img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span  class="foreinC pl-10">0 </span> &#8451; <span class="foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p  class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+
+        <div  class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p><img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span class="foreinC pl-10">0 </span> &#8451; <span  class=" foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p  class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p> <img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span  class="foreinC pl-10">0 </span> &#8451; <span class="foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p><img width="70px"  class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span  class="foreinC pl-10">0 </span> &#8451; <span class="foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div  class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p><img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span class="foreinC pl-10">0 </span> &#8451; <span  class=" foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p  class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p> <img width="70px" class=" forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span  class="foreinC pl-10">0 </span> &#8451; <span class="foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p><img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span  class="foreinC pl-10">0 </span> &#8451; <span class="foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div  class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p><img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span class="foreinC pl-10">0 </span> &#8451; <span  class=" foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p  class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden  bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p> <img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span  class="foreinC pl-10">0 </span> &#8451; <span class="foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden bg-gray-100 bg-opacity-10 hover:transform hover:scale-110 transition duration-500">
+          <p class="forecast-day pt-5 pl-10 text-xl"> Day </p>
+          <p><img width="70px" class="forecast-image ml-20" src=""/></p>
+          <p class="text-xl pt-3"><span  class="foreinC pl-10">0 </span> &#8451; <span class="foreinF pl-3"> 0 </span> &#8457;  </p>
+          <p class="forecast-status pl-10 text-xl pt-2 pb-5">Weather Status</p>
+        </div>
+      </div>
+      
+    </main>
+    </section>
+    <script src="./script.js"></script>
+</body>
+</html>
